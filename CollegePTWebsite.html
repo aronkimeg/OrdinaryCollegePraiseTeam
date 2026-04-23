@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ordinary — DCC College Praise Team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{height:100%;scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#F5F0E8;color:#1A1714;min-height:100%;-webkit-font-smoothing:antialiased}
+
+/* ─── TOKENS ─── */
+:root{
+  --bg:        #F5F0E8;
+  --bg2:       #EDE6D9;
+  --surface:   #FFFFFF;
+  --surface2:  #FAF7F2;
+
+  --ink:       #1A1714;
+  --ink2:      #4A4540;
+  --ink3:      #8A857E;
+  --border:    #DDD6CA;
+  --border2:   #C8BFB0;
+
+  --sage:      #5E8B70;
+  --sage-d:    #3D6B50;
+  --sage-l:    #A8C8B4;
+  --sage-bg:   #EAF2ED;
+  --sage-txt:  #2A5038;
+
+  --warm:      #C47C3A;
+  --warm-d:    #9A5A20;
+  --warm-bg:   #FDF0E2;
+  --warm-txt:  #7A4010;
+
+  --dust:      #9B8FC8;
+  --dust-d:    #7060A8;
+  --dust-bg:   #F0EEF8;
+  --dust-txt:  #4A3A88;
+
+  --rose:      #C46070;
+  --rose-d:    #9A3848;
+  --rose-bg:   #FAEAEC;
+  --rose-txt:  #7A2030;
+
+  --gold:      #C8A04A;
+
+  --r:  14px;
+  --r2: 20px;
+  --r3: 28px;
+
+  --sh:  0 2px 8px rgba(0,0,0,0.07), 0 0 1px rgba(0,0,0,0.05);
+  --sh2: 0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* ─── SCREEN SYSTEM ─── */
+#app{min-height:100vh;display:flex;flex-direction:column}
+.screen{display:none;flex:1;flex-direction:column;animation:screenIn 0.3s ease}
+.screen.active{display:flex}
+@keyframes screenIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ════════════════════════════════
+   LOGIN
+════════════════════════════════ */
+#loginScreen{
+  min-height:100vh;
+  background:var(--bg);
+  align-items:center;justify-content:center;
+  padding:2rem 1.25rem;
+  position:relative;overflow:hidden;
+}
+/* geometric accent shapes */
+.geo-tl{position:absolute;top:-60px;left:-60px;width:240px;height:240px;border-radius:50%;background:linear-gradient(135deg,rgba(94,139,112,0.12),rgba(94,139,112,0.04));pointer-events:none}
+.geo-br{position:absolute;bottom:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:linear-gradient(315deg,rgba(155,143,200,0.12),rgba(155,143,200,0.03));pointer-events:none}
+.geo-line{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--sage),var(--dust),var(--warm))}
+
+.login-container{width:100%;max-width:400px;position:relative;z-index:1}
+
+/* Jesus row */
+.jrow{display:flex;align-items:flex-end;gap:12px;margin-bottom:18px}
+.jfig{flex-shrink:0;animation:jfloat 3s ease-in-out infinite}
+@keyframes jfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.sbubble{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:14px 14px 14px 3px;
+  padding:10px 13px;flex:1;
+  box-shadow:var(--sh);position:relative;
+}
+.sbubble::before{content:'';position:absolute;left:-9px;bottom:12px;border:5px solid transparent;border-right-color:var(--border)}
+.sbubble::after{content:'';position:absolute;left:-6px;bottom:13px;border:4px solid transparent;border-right-color:var(--surface)}
+.sq{font-size:12px;font-weight:500;color:var(--ink);line-height:1.5}
+.sr{font-size:10px;color:var(--ink3);margin-top:3px;font-style:italic}
+.snxt{display:block;width:100%;text-align:right;font-size:10px;color:var(--ink3);background:none;border:none;cursor:pointer;font-family:inherit;margin-top:4px;transition:color .15s}
+.snxt:hover{color:var(--sage)}
+
+/* card */
+.lcard{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r3);padding:2.25rem 2rem;box-shadow:var(--sh2)}
+.lcard-eyebrow{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--sage);margin-bottom:8px}
+.lcard-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--ink);line-height:1.15;margin-bottom:6px}
+.lcard-sub{font-size:13px;color:var(--ink3);font-style:italic;margin-bottom:1.75rem;border-bottom:1px solid var(--border);padding-bottom:1.25rem}
+
+/* form */
+.flabel{font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--ink2);margin-bottom:6px;display:block}
+.fwrap{position:relative;margin-bottom:1rem}
+.fico{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;opacity:0.4;pointer-events:none}
+.finput{width:100%;padding:11px 13px 11px 38px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--bg);font-size:14px;color:var(--ink);font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s}
+.finput:focus{border-color:var(--sage);box-shadow:0 0 0 3px rgba(94,139,112,0.14)}
+.finput::placeholder{color:var(--ink3)}
+
+.rowtoggle{display:flex;gap:8px;margin-bottom:1.25rem}
+.rbtn{flex:1;padding:10px 8px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--bg);font-size:12px;font-weight:600;color:var(--ink2);cursor:pointer;font-family:inherit;transition:all .18s}
+.rbtn:hover{border-color:var(--border2)}
+.rbtn.active{background:var(--sage-bg);border-color:var(--sage);color:var(--sage-txt)}
+
+.lbtn{width:100%;padding:13px;background:var(--ink);border:none;border-radius:var(--r);color:white;font-size:14px;font-weight:600;letter-spacing:0.4px;cursor:pointer;font-family:inherit;transition:all .18s;position:relative;overflow:hidden}
+.lbtn::after{content:'→';position:absolute;right:16px;top:50%;transform:translateY(-50%);transition:transform .2s}
+.lbtn:hover{background:var(--ink2)}
+.lbtn:hover::after{transform:translateY(-50%) translateX(4px)}
+.lerr{font-size:12px;color:var(--rose-d);margin-top:9px;text-align:center;font-weight:500;min-height:16px}
+
+/* ════════════════════════════════
+   SHARED HEADER
+════════════════════════════════ */
+.site-header{
+  background:var(--surface);
+  border-bottom:2px solid var(--ink);
+  padding:0 1.5rem;
+  display:flex;align-items:stretch;justify-content:space-between;
+  position:sticky;top:0;z-index:200;
+}
+.header-left{display:flex;align-items:center;gap:16px;padding:12px 0}
+.site-wordmark{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--ink);letter-spacing:-0.3px}
+.site-wordmark span{color:var(--sage)}
+.header-pill{font-size:11px;font-weight:600;color:var(--ink3);background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:3px 10px;letter-spacing:0.3px}
+.signout-btn{font-size:12px;font-weight:600;color:var(--ink2);background:none;border:none;cursor:pointer;font-family:inherit;padding:12px 0;transition:color .15s;letter-spacing:0.2px}
+.signout-btn:hover{color:var(--rose-d)}
+
+/* ════════════════════════════════
+   HUB
+════════════════════════════════ */
+#hubScreen{background:var(--bg)}
+.hub-hero{
+  padding:2.5rem 1.5rem 2rem;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+}
+.hub-eyebrow{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--sage);margin-bottom:8px}
+.hub-greeting{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--ink);line-height:1.2;margin-bottom:4px}
+.hub-role{font-size:13px;color:var(--ink3)}
+
+.hub-jrow{display:flex;align-items:flex-end;gap:10px;padding:1.25rem 1.5rem;background:var(--surface);border-bottom:2px solid var(--border)}
+
+.hub-rooms{padding:1.5rem}
+.section-eyebrow{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.section-eyebrow::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.rooms-stack{display:flex;flex-direction:column;gap:12px}
+.rcard{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--r2);
+  display:flex;align-items:center;gap:16px;
+  padding:1.1rem 1.25rem;
+  cursor:pointer;
+  transition:all .2s cubic-bezier(.22,1,.36,1);
+  text-decoration:none;
+  position:relative;overflow:hidden;
+}
+.rcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--rc,var(--sage));border-radius:var(--r2) 0 0 var(--r2)}
+.rcard:hover{transform:translateX(4px);border-color:var(--border2);box-shadow:var(--sh)}
+.rcard-icon{font-size:26px;flex-shrink:0}
+.rcard-body{flex:1}
+.rcard-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--ink)}
+.rcard-desc{font-size:12px;color:var(--ink3);margin-top:3px}
+.rcard-arrow{font-size:18px;color:var(--border2);transition:transform .2s}
+.rcard:hover .rcard-arrow{transform:translateX(3px);color:var(--ink2)}
+
+/* ════════════════════════════════
+   ROOM SCREENS
+════════════════════════════════ */
+.rscreen{background:var(--bg);min-height:100vh;display:flex;flex-direction:column}
+.room-header{
+  background:var(--surface);
+  border-bottom:2px solid var(--ink);
+  padding:1rem 1.5rem;
+  display:flex;align-items:center;gap:12px;
+}
+.back-btn{font-size:12px;font-weight:600;color:var(--ink);background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r);padding:7px 14px;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.back-btn:hover{border-color:var(--border2)}
+.room-htitle{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;color:var(--ink);flex:1}
+
+/* jesus strip inside rooms */
+.jstrip{display:flex;align-items:flex-end;gap:10px;padding:1rem 1.5rem;background:var(--surface);border-bottom:1px solid var(--border)}
+.jstrip .sbubble{max-width:280px}
+
+/* room content */
+.rbody{padding:1.5rem;max-width:640px;margin:0 auto;width:100%}
+
+/* ── section headers inside rooms ── */
+.rsec-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin:1.5rem 0 0.9rem;
+  padding-bottom:0.75rem;
+  border-bottom:2px solid var(--ink);
+}
+.rsec-head:first-child{margin-top:0}
+.rsec-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--ink)}
+
+/* ── CALENDAR ── */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.cal-arr{width:36px;height:36px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--surface);font-size:17px;cursor:pointer;color:var(--ink2);display:flex;align-items:center;justify-content:center;transition:all .15s;font-weight:700}
+.cal-arr:hover{border-color:var(--ink);color:var(--ink)}
+.cal-mo{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--ink)}
+.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:1.25rem}
+.cdh{text-align:center;font-size:10px;font-weight:700;color:var(--ink3);padding:4px 0;letter-spacing:0.5px;text-transform:uppercase}
+.cc{min-height:48px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:4px;cursor:pointer;transition:all .15s}
+.cc:hover{border-color:var(--ink);background:var(--surface)}
+.cc.empty{background:transparent;border-color:transparent;cursor:default}
+.cc.today{border-color:var(--warm)!important;background:var(--warm-bg)!important}
+.cc.selected{border-color:var(--ink)!important;background:var(--ink)!important}
+.cc.selected .cnum{color:white}
+.cnum{font-size:11px;font-weight:700;color:var(--ink2);margin-bottom:2px}
+.chip{display:inline-block;font-size:7px;font-weight:700;padding:1px 4px;border-radius:4px;margin:1px 1px 0 0}
+.cp{background:#FEF3C7;color:#92400E}
+.ca{background:#D1FAE5;color:#065F46}
+.cd{background:#FEE2E2;color:#991B1B}
+
+/* date banner */
+.dbanner{background:var(--ink);color:white;border-radius:var(--r);padding:8px 14px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;margin:0 0 1rem}
+
+/* structured card */
+.scard{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r2);padding:1.1rem 1.25rem;margin-bottom:1rem}
+.scard-head{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--ink);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:0.5px}
+
+/* check pills */
+.cpills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.cpill{display:inline-flex;align-items:center;gap:5px;background:var(--bg);border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:500;color:var(--ink2);cursor:pointer;transition:all .15s}
+.cpill:hover{border-color:var(--sage)}
+.cpill input{accent-color:var(--sage);cursor:pointer}
+
+/* status rows */
+.srow{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)}
+.srow:last-child{border-bottom:none}
+.srow-name{font-size:13px;font-weight:500;color:var(--ink)}
+.spill{font-size:10px;font-weight:700;padding:4px 11px;border-radius:20px;letter-spacing:0.3px;text-transform:uppercase}
+.sp-pending{background:#FEF3C7;color:#92400E}
+.sp-accepted{background:#D1FAE5;color:#065F46}
+.sp-declined{background:#FEE2E2;color:#991B1B}
+.actbtns{display:flex;gap:6px}
+.actbtn{font-size:11px;font-weight:700;padding:5px 13px;border-radius:20px;cursor:pointer;border:1.5px solid;font-family:inherit;letter-spacing:0.2px;transition:all .15s}
+.ayes{background:#D1FAE5;color:#065F46;border-color:#6EE7B7}
+.ayes:hover{background:#A7F3D0}
+.ano{background:#FEE2E2;color:#991B1B;border-color:#FCA5A5}
+.ano:hover{background:#FECACA}
+
+/* member list */
+.mrow{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;font-weight:500;color:var(--ink)}
+.mrow:last-child{border-bottom:none}
+.delbtn{background:none;border:none;font-size:17px;cursor:pointer;color:var(--ink3);line-height:1;transition:color .15s}
+.delbtn:hover{color:var(--rose-d)}
+.addrow{display:flex;gap:8px;margin-top:10px}
+.sinput{flex:1;padding:9px 13px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--bg);font-size:13px;color:var(--ink);font-family:inherit;outline:none;transition:border-color .2s}
+.sinput:focus{border-color:var(--ink)}
+.sinput::placeholder{color:var(--ink3)}
+
+/* ── BUTTONS ── */
+.btn{padding:9px 18px;border-radius:var(--r);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;border:1.5px solid;transition:all .15s;letter-spacing:0.3px;white-space:nowrap}
+.btn-ink{background:var(--ink);border-color:var(--ink);color:white}
+.btn-ink:hover{background:var(--ink2);border-color:var(--ink2)}
+.btn-sage{background:var(--sage-bg);border-color:var(--sage);color:var(--sage-txt)}
+.btn-sage:hover{background:var(--sage-l);border-color:var(--sage-d)}
+.btn-warm{background:var(--warm-bg);border-color:var(--warm);color:var(--warm-txt)}
+.btn-warm:hover{background:#F8E4CC}
+.btn-rose{background:var(--rose-bg);border-color:var(--rose);color:var(--rose-txt)}
+.btn-rose:hover{background:#F6D4D8}
+.btn-dust{background:var(--dust);border-color:var(--dust-d);color:white}
+.btn-dust:hover{background:var(--dust-d)}
+.btn-ghost{background:transparent;border-color:var(--border);color:var(--ink2)}
+.btn-ghost:hover{border-color:var(--border2)}
+
+.infomsg{text-align:center;padding:2rem 1rem;font-size:13px;color:var(--ink3);font-style:italic}
+
+/* ── NOTES ── */
+.ncard{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r2);padding:1.1rem 1.25rem;cursor:pointer;transition:all .2s;margin-bottom:10px;display:flex;align-items:center;gap:14px}
+.ncard:hover{transform:translateX(4px);border-color:var(--border2);box-shadow:var(--sh)}
+.ncard-bar{width:4px;height:40px;border-radius:4px;background:var(--sage);flex-shrink:0}
+.ncard-body{flex:1;min-width:0}
+.ncard-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--ink)}
+.ncard-prev{font-size:12px;color:var(--ink3);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ncard-date{font-size:11px;color:var(--ink3);margin-top:5px}
+.ncard-arr{font-size:18px;color:var(--border2);flex-shrink:0}
+.ncard:hover .ncard-arr{color:var(--ink2)}
+
+.new-note-btn{width:100%;padding:1rem 1.25rem;text-align:left;background:transparent;border:2px dashed var(--border2);border-radius:var(--r2);cursor:pointer;font-size:13px;font-weight:600;color:var(--ink3);font-family:inherit;transition:all .18s;display:flex;align-items:center;gap:8px;margin-bottom:12px;letter-spacing:0.2px}
+.new-note-btn:hover{border-color:var(--sage);color:var(--sage-txt);background:var(--sage-bg)}
+
+.ned-title{width:100%;font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--ink);border:none;border-bottom:2px solid var(--ink);padding:0.5rem 0;margin-bottom:1rem;background:transparent;outline:none;font-family:'Syne',sans-serif}
+.ned-title:focus{border-bottom-color:var(--sage)}
+.ned-body{width:100%;min-height:260px;font-size:14px;color:var(--ink);line-height:1.8;border:none;background:transparent;outline:none;resize:none;font-family:'Plus Jakarta Sans',sans-serif}
+.nread-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--ink);margin-bottom:6px}
+.nread-meta{font-size:12px;color:var(--ink3);margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.nread-body{font-size:14px;color:var(--ink2);line-height:1.8;white-space:pre-wrap}
+
+/* ── PRAYER ── */
+.tabs{display:flex;gap:0;margin-bottom:1.25rem;border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.tab{flex:1;padding:9px 12px;font-size:12px;font-weight:700;color:var(--ink3);background:transparent;border:none;cursor:pointer;font-family:inherit;letter-spacing:0.3px;transition:all .15s;text-align:center}
+.tab.active{background:var(--ink);color:white}
+.tab:not(.active):hover{background:var(--bg2)}
+
+.pform{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:12px}
+.pform-top{padding:1.1rem 1.25rem 0}
+.pform-top h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--ink);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
+.ptxt{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--bg);font-size:13px;color:var(--ink);font-family:inherit;resize:none;min-height:90px;outline:none;transition:border-color .2s;line-height:1.6}
+.ptxt:focus{border-color:var(--ink)}
+.pform-footer{display:flex;align-items:center;gap:10px;padding:0.9rem 1.25rem;border-top:1px solid var(--border);margin-top:12px;background:var(--bg);flex-wrap:wrap;gap:8px}
+.anon-check{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:500;color:var(--ink2);cursor:pointer;flex:1}
+.anon-check input{accent-color:var(--sage);cursor:pointer}
+.phint{font-size:11px;color:var(--ink3)}
+
+.pcard{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r2);padding:1.1rem 1.25rem;margin-bottom:10px}
+.pcard-who{font-size:11px;font-weight:700;color:var(--sage-txt);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;gap:5px}
+.pcard-text{font-size:14px;color:var(--ink2);line-height:1.65}
+.pcard-date{font-size:11px;color:var(--ink3);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.pcard-foot{display:flex;justify-content:flex-end;margin-top:8px}
+
+/* ── SCHEDULE DASHBOARD ── */
+.hub-sched{padding:0 1.5rem 1.5rem;max-width:640px;margin:0 auto;width:100%}
+.sdash-section{margin-bottom:1.25rem}
+.sdash-label{
+  font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:8px;
+}
+.sdash-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* individual date block */
+.sdash-date-block{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--r2);overflow:hidden;margin-bottom:10px;
+}
+.sdash-date-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;background:var(--bg2);
+  border-bottom:1px solid var(--border);
+}
+.sdash-date-label{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--ink)}
+.sdash-date-sub{font-size:11px;color:var(--ink3);margin-top:1px}
+.sdash-go-btn{
+  font-size:11px;font-weight:700;color:var(--ink2);background:var(--surface);
+  border:1.5px solid var(--border);border-radius:20px;padding:4px 12px;
+  cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;
+}
+.sdash-go-btn:hover{border-color:var(--border2);color:var(--ink)}
+
+/* member rows inside date block */
+.sdash-rows{padding:4px 0}
+.sdash-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 14px;border-bottom:1px solid var(--border);
+  transition:background .15s;
+}
+.sdash-row:last-child{border-bottom:none}
+.sdash-row.st-accepted{background:#F0FBF4}
+.sdash-row.st-declined{background:#FEF2F2}
+.sdash-row.st-pending {background:#FFFBEB}
+.sdash-name{font-size:13px;font-weight:600;color:var(--ink)}
+.sdash-right{display:flex;align-items:center;gap:8px}
+
+/* pastel status badges */
+.stbadge{font-size:10px;font-weight:700;padding:4px 11px;border-radius:20px;letter-spacing:0.3px;text-transform:uppercase}
+.stb-accepted{background:#BBF0D0;color:#0A5C30;border:1px solid #86E6B0}
+.stb-declined{background:#FFD0D0;color:#8B1A1A;border:1px solid #FFB0B0}
+.stb-pending {background:#FFE5B4;color:#7A4A00;border:1px solid #FFD080}
+
+/* respond buttons inside dashboard */
+.sdash-actbtns{display:flex;gap:6px}
+.sdash-yes{font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;cursor:pointer;border:1.5px solid #6EE7B7;background:#D1FAE5;color:#065F46;font-family:inherit;transition:all .15s}
+.sdash-yes:hover{background:#A7F3D0}
+.sdash-no {font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;cursor:pointer;border:1.5px solid #FCA5A5;background:#FEE2E2;color:#991B1B;font-family:inherit;transition:all .15s}
+.sdash-no:hover{background:#FECACA}
+
+/* leader attention section */
+.sdash-alert-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-bottom:1px solid var(--border);
+}
+.sdash-alert-row:last-child{border-bottom:none}
+.sdash-alert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-declined{background:#F87171}
+.dot-pending {background:#FBBf24}
+.sdash-alert-info{flex:1}
+.sdash-alert-name{font-size:13px;font-weight:600;color:var(--ink)}
+.sdash-alert-date{font-size:11px;color:var(--ink3);margin-top:1px}
+.sdash-alert-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px}
+.ab-declined{background:#FFD0D0;color:#8B1A1A;border:1px solid #FFB0B0}
+.ab-pending {background:#FFE5B4;color:#7A4A00;border:1px solid #FFD080}
+
+.sdash-empty{font-size:13px;color:var(--ink3);font-style:italic;padding:14px;text-align:center}
+
+/* ── RESPONSIVE ── */
+@media(max-width:420px){
+  .lcard{padding:1.75rem 1.25rem}
+  .hub-hero{padding:1.75rem 1.25rem 1.5rem}
+  .rbody{padding:1.25rem 1rem}
+  .hub-rooms{padding:1.25rem 1rem}
+  .hub-sched{padding:0 1rem 1.25rem}
+}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px}
+
+/* ── SET PRAYER CARDS on hub dashboard ── */
+.setpr-block{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:10px}
+.setpr-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--border)}
+.setpr-date{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--ink)}
+.setpr-count{font-size:11px;color:var(--ink3);background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2px 9px}
+.setpr-items{padding:4px 0}
+.setpr-item{padding:9px 14px;border-bottom:1px solid var(--border)}
+.setpr-item:last-child{border-bottom:none}
+.setpr-item-who{font-size:11px;font-weight:700;color:var(--sage-txt);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px}
+.setpr-item-text{font-size:13px;color:var(--ink2);line-height:1.5}
+
+/* ── Set prayer tab in prayer room ── */
+.pset-date-select{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--bg);font-size:13px;color:var(--ink);font-family:inherit;outline:none;transition:border-color .2s;margin-bottom:10px;cursor:pointer}
+.pset-date-select:focus{border-color:var(--sage)}
+.pset-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--dust-bg);color:var(--dust-txt);border:1px solid var(--dust);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ═══════════ LOGIN ═══════════ -->
+<div id="loginScreen" class="screen active">
+  <div class="geo-tl"></div>
+  <div class="geo-br"></div>
+  <div class="geo-line"></div>
+
+  <div class="login-container">
+
+    <div class="jrow">
+      <div class="jfig" id="loginJesus"></div>
+      <div class="sbubble">
+        <div class="sq" id="loginQ">...</div>
+        <div class="sr" id="loginR"></div>
+        <button class="snxt" onclick="nextQ('login')">next ›</button>
+      </div>
+    </div>
+
+    <div class="lcard">
+      <div class="lcard-eyebrow">DCC Church · College Ministry</div>
+      <div class="lcard-title">Ordinary College<br>Praise Team</div>
+      <div class="lcard-sub">"Where ordinary meets extraordinary ✨"</div>
+
+      <label class="flabel">Your Name</label>
+      <div class="fwrap">
+        <span class="fico">👤</span>
+        <input class="finput" id="nameIn" type="text" placeholder="Enter your name..." autocomplete="off"/>
+      </div>
+
+      <label class="flabel">Secret Greeting</label>
+      <div class="fwrap">
+        <span class="fico">🔒</span>
+        <input class="finput" id="passIn" type="password" placeholder="Password..." onkeydown="if(event.key==='Enter')doLogin()"/>
+      </div>
+
+      <div class="rowtoggle">
+        <button class="rbtn active" id="rL" onclick="setRole('leader')">🎵 College Leader</button>
+        <button class="rbtn"        id="rM" onclick="setRole('member')">🎶 College Student</button>
+      </div>
+
+      <button class="lbtn" onclick="doLogin()">Enter the Ordinary</button>
+      <div class="lerr" id="loginErr"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════ HUB ═══════════ -->
+<div id="hubScreen" class="screen">
+  <div class="site-header">
+    <div class="header-left">
+      <div class="site-wordmark">Ordinary <span>Praise</span></div>
+      <div class="header-pill" id="hubPill">DCC Church</div>
+    </div>
+    <button class="signout-btn" onclick="doLogout()">Sign out ↩</button>
+  </div>
+
+  <div class="hub-hero">
+    <div class="hub-eyebrow">Welcome back</div>
+    <div class="hub-greeting" id="hubName">Hey there!</div>
+    <div class="hub-role"    id="hubRole"></div>
+  </div>
+
+  <div class="hub-jrow">
+    <div class="jfig" id="hubJesus" style="animation:jfloat 3s ease-in-out infinite"></div>
+    <div class="sbubble">
+      <div class="sq" id="hubQ">...</div>
+      <div class="sr" id="hubR"></div>
+      <button class="snxt" onclick="nextQ('hub')">next ›</button>
+    </div>
+  </div>
+
+  <div class="hub-rooms">
+    <div class="section-eyebrow">Your rooms</div>
+    <div class="rooms-stack">
+      <div class="rcard" style="--rc:var(--warm)" onclick="openRoom('schedule')">
+        <span class="rcard-icon">📅</span>
+        <div class="rcard-body">
+          <div class="rcard-name">Schedule</div>
+          <div class="rcard-desc">View the calendar, accept or decline dates</div>
+        </div>
+        <span class="rcard-arrow">›</span>
+      </div>
+      <div class="rcard" style="--rc:var(--sage)" onclick="openRoom('notes')">
+        <span class="rcard-icon">📝</span>
+        <div class="rcard-body">
+          <div class="rcard-name">Notes</div>
+          <div class="rcard-desc">Leader's pages and announcements</div>
+        </div>
+        <span class="rcard-arrow">›</span>
+      </div>
+      <div class="rcard" style="--rc:var(--dust)" onclick="openRoom('prayer')">
+        <span class="rcard-icon">🙏</span>
+        <div class="rcard-body">
+          <div class="rcard-name">Prayer Requests</div>
+          <div class="rcard-desc">Submit a request or read the team's prayers</div>
+        </div>
+        <span class="rcard-arrow">›</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Schedule dashboard — injected by JS on login -->
+  <div class="hub-sched" id="schedDash"></div>
+  <!-- Set prayer dashboard -->
+  <div class="hub-sched" id="setPrayDash"></div>
+</div>
+
+<!-- ═══════════ SCHEDULE ═══════════ -->
+<div id="scheduleRoom" class="screen">
+  <div class="rscreen">
+    <div class="room-header">
+      <button class="back-btn" onclick="goHub()">← Back</button>
+      <div class="room-htitle">Schedule</div>
+    </div>
+    <div class="jstrip">
+      <div class="jfig" id="schedJesus" style="animation:jfloat 3s ease-in-out infinite"></div>
+      <div class="sbubble">
+        <div class="sq" id="schedQ">...</div>
+        <div class="sr" id="schedR"></div>
+        <button class="snxt" onclick="nextQ('sched')">next ›</button>
+      </div>
+    </div>
+    <div class="rbody" id="schedBody"></div>
+  </div>
+</div>
+
+<!-- ═══════════ NOTES ═══════════ -->
+<div id="notesRoom" class="screen">
+  <div class="rscreen">
+    <div class="room-header">
+      <button class="back-btn" id="notesBack" onclick="notesBack()">← Back</button>
+      <div class="room-htitle" id="notesTitle">Notes</div>
+    </div>
+    <div class="jstrip">
+      <div class="jfig" id="notesJesus" style="animation:jfloat 3s ease-in-out infinite"></div>
+      <div class="sbubble">
+        <div class="sq" id="notesQ">...</div>
+        <div class="sr" id="notesR"></div>
+        <button class="snxt" onclick="nextQ('notesP')">next ›</button>
+      </div>
+    </div>
+    <div class="rbody" id="notesBody"></div>
+  </div>
+</div>
+
+<!-- ═══════════ PRAYER ═══════════ -->
+<div id="prayerRoom" class="screen">
+  <div class="rscreen">
+    <div class="room-header">
+      <button class="back-btn" onclick="goHub()">← Back</button>
+      <div class="room-htitle">Prayer Requests</div>
+    </div>
+    <div class="jstrip">
+      <div class="jfig" id="prayerJesus" style="animation:jfloat 3s ease-in-out infinite"></div>
+      <div class="sbubble">
+        <div class="sq" id="prayerQ">...</div>
+        <div class="sr" id="prayerR"></div>
+        <button class="snxt" onclick="nextQ('prayer')">next ›</button>
+      </div>
+    </div>
+    <div class="rbody" id="prayerBody"></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+/* ═══ JESUS SVG ═══ */
+const ITEMS=['bible','flower','dove'];
+let iIdx=0;
+
+function jItem(t,s){
+  if(t==='bible')return`<g transform="translate(${-4*s},${46*s}) rotate(-22,${8*s},${10*s})">
+    <rect x="0" y="0" width="${17*s}" height="${21*s}" rx="${2*s}" fill="#7A3810" stroke="#4A1A08" stroke-width="${1.5*s}"/>
+    <rect x="${2*s}" y="${2*s}" width="${13*s}" height="${17*s}" rx="${s}" fill="#9A4820" opacity="0.5"/>
+    <line x1="${4*s}" y1="${7*s}" x2="${13*s}" y2="${7*s}" stroke="#F5E0B0" stroke-width="${0.9*s}"/>
+    <line x1="${4*s}" y1="${10.5*s}" x2="${13*s}" y2="${10.5*s}" stroke="#F5E0B0" stroke-width="${0.9*s}"/>
+    <line x1="${4*s}" y1="${14*s}" x2="${13*s}" y2="${14*s}" stroke="#F5E0B0" stroke-width="${0.9*s}"/>
+    <text x="${8.5*s}" y="${-3*s}" text-anchor="middle" font-size="${9*s}" fill="#C8A04A">✝</text></g>`;
+  if(t==='flower')return`<g transform="translate(${2*s},${40*s})">
+    <line x1="${6*s}" y1="0" x2="${6*s}" y2="${18*s}" stroke="#5AAA44" stroke-width="${2.5*s}"/>
+    <circle cx="${6*s}" cy="${-3*s}" r="${7*s}" fill="#E87FA8" opacity="0.9"/>
+    <circle cx="${-1*s}" cy="${4*s}" r="${5*s}" fill="#F0A8C0" opacity="0.8"/>
+    <circle cx="${13*s}" cy="${4*s}" r="${5*s}" fill="#F0A8C0" opacity="0.8"/>
+    <circle cx="${6*s}" cy="${10*s}" r="${4*s}" fill="#F0A8C0" opacity="0.7"/>
+    <circle cx="${6*s}" cy="${-3*s}" r="${3*s}" fill="#FFF176"/></g>`;
+  return`<g transform="translate(${-1*s},${35*s})">
+    <ellipse cx="${9*s}" cy="${8*s}" rx="${9*s}" ry="${5*s}" fill="white" stroke="#DDD0C0" stroke-width="${s}"/>
+    <circle cx="${16*s}" cy="${4*s}" r="${4*s}" fill="white" stroke="#DDD0C0" stroke-width="${s}"/>
+    <circle cx="${18.5*s}" cy="${2.5*s}" r="${1.5*s}" fill="#2C1810"/>
+    <path d="M${2*s},${5*s} Q${-5*s},${-1*s} ${1*s},${-3*s}" fill="white" stroke="#DDD0C0" stroke-width="${s}"/>
+    <path d="M${4*s},${4*s} Q${-1*s},${1*s} ${2*s},${-1*s}" fill="white" opacity="0.6"/></g>`;
+}
+
+function buildJesus(px=58,t='bible',spike=false){
+  const s=px/64,W=Math.round(78*s),H=Math.round(88*s);
+  let halo;
+  if(spike){
+    const n=14,cx=W/2,cy=H*0.23,pts=[];
+    for(let i=0;i<n*2;i++){const a=(i*Math.PI/n)-Math.PI/2;const r=i%2===0?33*s:22*s;pts.push(`${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`);}
+    halo=`<polygon points="${pts.join(' ')}" fill="#C8A04A" opacity="0.85"/>`;
+  } else {
+    halo=`<ellipse cx="${W/2}" cy="${H*0.22}" rx="${21*s}" ry="${7*s}" fill="none" stroke="#C8A04A" stroke-width="${3.5*s}" opacity="0.9"/>`;
+  }
+  return`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;display:block">
+    ${halo}
+    <ellipse cx="${W/2}" cy="${H*0.975}" rx="${22*s}" ry="${4*s}" fill="rgba(0,0,0,0.08)"/>
+    <rect x="${12*s}" y="${45*s}" width="${54*s}" height="${36*s}" rx="${10*s}" fill="#F5EED8" stroke="#C8A878" stroke-width="${2*s}"/>
+    <path d="M${12*s},${75*s} Q${39*s},${83*s} ${66*s},${75*s}" fill="#EAE2C0" stroke="#C8A878" stroke-width="${1.5*s}"/>
+    <path d="M${17*s},${45*s} L${66*s},${73*s} L${58*s},${81*s} L${9*s},${53*s}Z" fill="#C41E1E" stroke="#8A0808" stroke-width="${1.5*s}"/>
+    <path d="M${19*s},${45*s} L${66*s},${69*s}" stroke="rgba(255,120,120,0.28)" stroke-width="${4*s}" fill="none" stroke-linecap="round"/>
+    <line x1="${W/2}" y1="${53*s}" x2="${W/2}" y2="${79*s}" stroke="#C8A878" stroke-width="${1.5*s}" opacity="0.45"/>
+    <ellipse cx="${26*s}" cy="${80*s}" rx="${8*s}" ry="${3.5*s}" fill="#C89848" stroke="#8B5A20" stroke-width="${1.5*s}"/>
+    <ellipse cx="${52*s}" cy="${80*s}" rx="${8*s}" ry="${3.5*s}" fill="#C89848" stroke="#8B5A20" stroke-width="${1.5*s}"/>
+    <line x1="${22*s}" y1="${77*s}" x2="${30*s}" y2="${80*s}" stroke="#8B5A20" stroke-width="${1.5*s}"/>
+    <line x1="${48*s}" y1="${77*s}" x2="${56*s}" y2="${80*s}" stroke="#8B5A20" stroke-width="${1.5*s}"/>
+    <path d="M${15*s},${51*s} Q${1*s},${55*s} ${1*s},${62*s}" stroke="#F0CC90" stroke-width="${11*s}" stroke-linecap="round" fill="none"/>
+    <path d="M${63*s},${51*s} Q${77*s},${55*s} ${77*s},${62*s}" stroke="#F0CC90" stroke-width="${11*s}" stroke-linecap="round" fill="none"/>
+    <circle cx="${2*s}"  cy="${64*s}" r="${6*s}" fill="#F0CC90" stroke="#D4A870" stroke-width="${2*s}"/>
+    <circle cx="${76*s}" cy="${64*s}" r="${6*s}" fill="#F0CC90" stroke="#D4A870" stroke-width="${2*s}"/>
+    ${jItem(t,s)}
+    <rect x="${29*s}" y="${39*s}" width="${20*s}" height="${12*s}" rx="${5*s}" fill="#F0CC90" stroke="#D4A870" stroke-width="${1.5*s}"/>
+    <circle cx="${W/2}" cy="${26*s}" r="${24*s}" fill="#F0CC90" stroke="#D4A870" stroke-width="${2.5*s}"/>
+    <path d="M${14*s},${22*s} Q${16*s},${2*s} ${W/2},${2*s} Q${62*s},${2*s} ${64*s},${22*s}" fill="#2E1008" stroke="#1A0804" stroke-width="${2*s}"/>
+    <path d="M${14*s},${18*s} Q${5*s},${30*s} ${7*s},${48*s} Q${9*s},${55*s} ${16*s},${56*s}" fill="#2E1008" stroke="#1A0804" stroke-width="${1.5*s}"/>
+    <path d="M${64*s},${18*s} Q${73*s},${30*s} ${71*s},${48*s} Q${69*s},${55*s} ${62*s},${56*s}" fill="#2E1008" stroke="#1A0804" stroke-width="${1.5*s}"/>
+    <ellipse cx="${14*s}" cy="${28*s}" rx="${5.5*s}" ry="${7*s}" fill="#F0CC90" stroke="#D4A870" stroke-width="${2*s}"/>
+    <ellipse cx="${64*s}" cy="${28*s}" rx="${5.5*s}" ry="${7*s}" fill="#F0CC90" stroke="#D4A870" stroke-width="${2*s}"/>
+    <ellipse cx="${29*s}" cy="${25*s}" rx="${5.5*s}" ry="${6.5*s}" fill="#1A0804"/>
+    <ellipse cx="${49*s}" cy="${25*s}" rx="${5.5*s}" ry="${6.5*s}" fill="#1A0804"/>
+    <circle cx="${31*s}" cy="${22*s}" r="${2*s}" fill="white"/>
+    <circle cx="${51*s}" cy="${22*s}" r="${2*s}" fill="white"/>
+    <path d="M${22*s},${17*s} Q${29*s},${13*s} ${36*s},${17*s}" fill="none" stroke="#1A0804" stroke-width="${2.5*s}" stroke-linecap="round"/>
+    <path d="M${42*s},${17*s} Q${49*s},${13*s} ${56*s},${17*s}" fill="none" stroke="#1A0804" stroke-width="${2.5*s}" stroke-linecap="round"/>
+    <path d="M${34*s},${31*s} Q${39*s},${36*s} ${44*s},${31*s}" fill="none" stroke="#D4A070" stroke-width="${2*s}" stroke-linecap="round"/>
+    <path d="M${29*s},${37*s} Q${39*s},${43*s} ${49*s},${37*s}" fill="none" stroke="#B06040" stroke-width="${2.5*s}" stroke-linecap="round"/>
+    <path d="M${13*s},${37*s} Q${15*s},${54*s} ${W/2},${58*s} Q${63*s},${54*s} ${65*s},${37*s} Q${55*s},${34*s} ${W/2},${33*s} Q${23*s},${34*s} ${13*s},${37*s}Z" fill="#2E1008" stroke="#1A0804" stroke-width="${1.5*s}" opacity="0.95"/>
+    <path d="M${22*s},${39*s} Q${28*s},${52*s} ${39*s},${54*s}" stroke="#4A2010" stroke-width="${1.5*s}" fill="none" opacity="0.4"/>
+    <path d="M${56*s},${39*s} Q${50*s},${52*s} ${39*s},${55*s}" stroke="#4A2010" stroke-width="${1.5*s}" fill="none" opacity="0.4"/>
+    <path d="M${24*s},${35*s} Q${30*s},${39*s} ${39*s},${35*s}" fill="#2E1008" stroke="#1A0804" stroke-width="${1.5*s}"/>
+    <path d="M${39*s},${35*s} Q${48*s},${39*s} ${54*s},${35*s}" fill="#2E1008" stroke="#1A0804" stroke-width="${1.5*s}"/>
+  </svg>`;
+}
+
+function drawAll(){
+  const cfg=[
+    ['loginJesus',60,true], ['hubJesus',54,false],
+    ['schedJesus',44,false], ['notesJesus',44,true], ['prayerJesus',44,false]
+  ];
+  cfg.forEach(([id,px,sp])=>{ const el=document.getElementById(id); if(el) el.innerHTML=buildJesus(px,ITEMS[iIdx%3],sp); });
+}
+setInterval(()=>{ iIdx=(iIdx+1)%3; drawAll(); },4000);
+
+/* ═══ QUOTES ═══ */
+const QQ=[
+  {q:"I love you more than all the fish in the sea! 🐟",r:"— Jesus (probably)"},
+  {q:"For God so loved the world — and yes, that means YOU! 🌍",r:"John 3:16"},
+  {q:"Jesus wept. Shortest verse in the Bible. He felt things deeply. 🥲",r:"John 11:35"},
+  {q:"I can do ALL things through Christ who strengthens me. Even Mondays. 💪",r:"Philippians 4:13"},
+  {q:"John outran Peter to the tomb… and made sure everyone knew it. 😂",r:"John 20:4 (the petty version)"},
+  {q:"The Lord is my shepherd. I shall not want. (But snacks are nice.) 🐑",r:"Psalm 23:1"},
+  {q:"Cast ALL your anxieties on me — I care for you! 🌿",r:"1 Peter 5:7"},
+  {q:"Be still and KNOW that I am God. Breathe. ☁️",r:"Psalm 46:10"},
+  {q:"Peter: I'll never deny you! Peter: *denies 3 times* Same Peter, same. 😅",r:"Matthew 26:75"},
+  {q:"You are fearfully and wonderfully made. Don't forget that. ✨",r:"Psalm 139:14"},
+  {q:"David defeated Goliath with a stone. God loves the unlikely ones. 🪨",r:"1 Samuel 17"},
+  {q:"My grace is SUFFICIENT for you. Not just enough — SUFFICIENT. 🙌",r:"2 Corinthians 12:9"},
+  {q:"Elijah hid under a tree and said take me, Lord. Even prophets have bad days. 🌳",r:"1 Kings 19 (mood)"},
+  {q:"NOTHING can separate you from my love. Nothing. ❤️",r:"Romans 8:38–39"},
+  {q:"I turned water into wine and it was the BEST wine. I don't do mediocre. 🍷",r:"John 2:10"},
+  {q:"You are the LIGHT of the world. Don't hide it! 💡",r:"Matthew 5:14"},
+  {q:"Jonah ran from God and ended up inside a whale. Running never works. 🐋",r:"Jonah 1"},
+  {q:"I know the plans I have for you — plans to prosper and give you hope. 🌅",r:"Jeremiah 29:11"},
+  {q:"The disciples fell asleep while I prayed. I still love them so much. 😴",r:"Matthew 26:40"},
+  {q:"Draw near to God and He will draw near to you. Come on in! 🚪",r:"James 4:8"},
+];
+const qi={login:0,hub:0,sched:0,notesP:0,prayer:0};
+function initQ(){Object.keys(qi).forEach(k=>qi[k]=Math.floor(Math.random()*QQ.length))}
+function nextQ(k){qi[k]=(qi[k]+1)%QQ.length;setQ(k)}
+function setQ(k){
+  const q=QQ[qi[k]];
+  const m={login:['loginQ','loginR'],hub:['hubQ','hubR'],sched:['schedQ','schedR'],notesP:['notesQ','notesR'],prayer:['prayerQ','prayerR']};
+  const ids=m[k];if(!ids)return;
+  const t=document.getElementById(ids[0]),r=document.getElementById(ids[1]);
+  if(t)t.textContent=q.q;if(r)r.textContent=q.r;
+}
+function setAllQ(){Object.keys(qi).forEach(k=>setQ(k))}
+
+/* ═══ AUTH ═══ */
+const LP='DCC',MP='Ordinary';
+let user={name:'',role:''},sr='leader';
+function setRole(r){sr=r;document.getElementById('rL').classList.toggle('active',r==='leader');document.getElementById('rM').classList.toggle('active',r==='member')}
+function doLogin(){
+  const n=document.getElementById('nameIn').value.trim();
+  const p=document.getElementById('passIn').value;
+  const e=document.getElementById('loginErr');
+  if(!n){e.textContent='Please enter your name.';return}
+  if(sr==='leader'&&p===LP){user={name:n,role:'leader'};e.textContent='';showHub()}
+  else if(sr==='member'&&p===MP){user={name:n,role:'member'};e.textContent='';showHub()}
+  else e.textContent='Incorrect password — try again.';
+}
+function doLogout(){user={name:'',role:''};document.getElementById('passIn').value='';document.getElementById('nameIn').value='';show('loginScreen')}
+function showHub(){
+  show('hubScreen');
+  document.getElementById('hubName').textContent=`Hey, ${user.name} 👋`;
+  document.getElementById('hubRole').textContent=user.role==='leader'?'College Leader · DCC Church':'College Student · DCC Church';
+  document.getElementById('hubPill').textContent=user.role==='leader'?'Leader':'Student';
+  setQ('hub');drawAll();
+  renderSchedDash();
+  setTimeout(renderSetPrayDash,50);
+}
+function goHub(){showHub()}
+function openRoom(r){if(r==='schedule')openSched();else if(r==='notes')openNotes();else if(r==='prayer')openPrayer()}
+
+function renderSchedDash(){
+  const dash=document.getElementById('schedDash');
+  if(!dash)return;
+  // also refresh set prayer dash
+  setTimeout(renderSetPrayDash,0);
+  const sch=gSch();
+  const today=new Date();today.setHours(0,0,0,0);
+  const upcomingDates=Object.keys(sch)
+    .filter(ds=>{const d=new Date(ds+'T12:00:00');return d>=today&&sch[ds].length>0;})
+    .sort();
+
+  if(user.role==='member'){
+    const myDates=upcomingDates.filter(ds=>sch[ds].some(a=>a.name.toLowerCase()===user.name.toLowerCase()));
+    if(!myDates.length){dash.innerHTML='';return;}
+    let h='<div class="sdash-section"><div class="sdash-label">Your upcoming dates</div>';
+    myDates.forEach(ds=>{
+      const mine=sch[ds].find(a=>a.name.toLowerCase()===user.name.toLowerCase());
+      if(!mine)return;
+      const dl=new Date(ds+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+      h+=`<div class="sdash-date-block">
+        <div class="sdash-date-header">
+          <div>
+            <div class="sdash-date-label">📅 ${dl}</div>
+            <div class="sdash-date-sub">You have been assigned to this date</div>
+          </div>
+          <button class="sdash-go-btn" onclick="openSchedAt('${ds}')">Open →</button>
+        </div>
+        <div class="sdash-rows">
+          <div class="sdash-row st-${mine.status}">
+            <span class="sdash-name">${esc(mine.name)}</span>
+            <div class="sdash-right">
+              ${mine.status==='pending'
+                ?`<div class="sdash-actbtns"><button class="sdash-yes" onclick="dashRespond('${ds}','${esc(mine.name)}','accepted')">✓ Accept</button><button class="sdash-no" onclick="dashRespond('${ds}','${esc(mine.name)}','declined')">✕ Decline</button></div>`
+                :`<span class="stbadge stb-${mine.status}">${cap(mine.status)}</span>`}
+            </div>
+          </div>
+        </div>
+      </div>`;
+    });
+    h+='</div>';
+    dash.innerHTML=h;
+
+  } else {
+    const myDates=upcomingDates.filter(ds=>sch[ds].some(a=>a.name.toLowerCase()===user.name.toLowerCase()));
+    const attentionItems=[];
+    upcomingDates.forEach(ds=>{
+      sch[ds].forEach(a=>{if(a.status==='declined'||a.status==='pending')attentionItems.push({ds,name:a.name,status:a.status});});
+    });
+    if(!myDates.length&&!attentionItems.length){dash.innerHTML='';return;}
+    let h='';
+
+    if(myDates.length){
+      h+='<div class="sdash-section"><div class="sdash-label">Your assigned dates</div>';
+      myDates.forEach(ds=>{
+        const mine=sch[ds].find(a=>a.name.toLowerCase()===user.name.toLowerCase());
+        if(!mine)return;
+        const dl=new Date(ds+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+        h+=`<div class="sdash-date-block">
+          <div class="sdash-date-header">
+            <div><div class="sdash-date-label">📅 ${dl}</div></div>
+            <button class="sdash-go-btn" onclick="openSchedAt('${ds}')">Open →</button>
+          </div>
+          <div class="sdash-rows">
+            <div class="sdash-row st-${mine.status}">
+              <span class="sdash-name">${esc(mine.name)} <span style="font-size:11px;color:var(--ink3)">(you)</span></span>
+              <span class="stbadge stb-${mine.status}">${cap(mine.status)}</span>
+            </div>
+          </div>
+        </div>`;
+      });
+      h+='</div>';
+    }
+
+    if(attentionItems.length){
+      const byDate={};
+      attentionItems.forEach(item=>{if(!byDate[item.ds])byDate[item.ds]=[];byDate[item.ds].push(item);});
+      h+='<div class="sdash-section"><div class="sdash-label">Needs attention</div><div class="sdash-date-block">';
+      Object.keys(byDate).sort().forEach(ds=>{
+        const dl=new Date(ds+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+        byDate[ds].forEach(item=>{
+          h+=`<div class="sdash-alert-row">
+            <div class="sdash-alert-dot dot-${item.status}"></div>
+            <div class="sdash-alert-info">
+              <div class="sdash-alert-name">${esc(item.name)}</div>
+              <div class="sdash-alert-date">${dl}</div>
+            </div>
+            <span class="sdash-alert-badge ab-${item.status}">${item.status==='declined'?'Declined':'No response'}</span>
+            <button class="sdash-go-btn" onclick="openSchedAt('${ds}')" style="margin-left:6px">View →</button>
+          </div>`;
+        });
+      });
+      h+='</div></div>';
+    }
+    dash.innerHTML=h;
+  }
+}
+
+function renderSetPrayDash(){
+  const dash=document.getElementById('setPrayDash');
+  if(!dash)return;
+  const mySetPr=getMySetPrayers();
+  if(!mySetPr||!mySetPr.length){dash.innerHTML='';return;}
+
+  // Group by setDate, only show future/today dates
+  const today=new Date();today.setHours(0,0,0,0);
+  const byDate={};
+  mySetPr.forEach(p=>{
+    const d=new Date(p.setDate+'T12:00:00');
+    if(d<today)return;
+    if(!byDate[p.setDate])byDate[p.setDate]=[];
+    byDate[p.setDate].push(p);
+  });
+  const dates=Object.keys(byDate).sort();
+  if(!dates.length){dash.innerHTML='';return;}
+
+  let h=`<div class="sdash-section">
+    <div class="sdash-label">Set prayer requests</div>`;
+  dates.forEach(ds=>{
+    const dl=new Date(ds+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+    const items=byDate[ds];
+    h+=`<div class="setpr-block">
+      <div class="setpr-header">
+        <div class="setpr-date">🎵 ${dl}</div>
+        <span class="setpr-count">${items.length} request${items.length!==1?'s':''}</span>
+      </div>
+      <div class="setpr-items">`;
+    items.forEach(p=>{
+      h+=`<div class="setpr-item">
+        <div class="setpr-item-who">${p.anon?'🌸 Anonymous':'🙏 '+esc(p.name)}</div>
+        <div class="setpr-item-text">${esc(p.text)}</div>
+      </div>`;
+    });
+    h+=`</div>
+    <div style="padding:8px 14px;border-top:1px solid var(--border)">
+      <button class="sdash-go-btn" onclick="openPrWithTab('set')" style="width:100%;text-align:center">View all set prayers →</button>
+    </div>
+    </div>`;
+  });
+  h+=`</div>`;
+  dash.innerHTML=h;
+}
+
+function openPrWithTab(tab){pTab=tab;openPrayer()}
+
+function dashRespond(ds,name,status){
+  const sch=gSch();if(!sch[ds])return;
+  const idx=sch[ds].findIndex(a=>a.name.toLowerCase()===name.toLowerCase());
+  if(idx>-1){sch[ds][idx].status=status;sSch(sch);}
+  renderSchedDash();
+}
+
+function openSchedAt(ds){
+  const d=new Date(ds+'T12:00:00');
+  cY=d.getFullYear();cM=d.getMonth();selD=ds;
+  openSched();
+  setTimeout(()=>{const el=document.querySelector('.dbanner');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},120);
+}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
+
+/* ═══ FIREBASE INIT ═══ */
+let db = null;
+const firebaseConfig = {
+  apiKey: "AIzaSyAXg3e1cIiQgG5YGl--RSBoS3vXKdDlYiE",
+  authDomain: "ordinary-college-praise-team.firebaseapp.com",
+  projectId: "ordinary-college-praise-team",
+  storageBucket: "ordinary-college-praise-team.firebasestorage.app",
+  messagingSenderId: "160045970674",
+  appId: "1:160045970674:web:175f45c1e33672fdb14c6b",
+  measurementId: "G-T2FWRTTS4E"
+};
+
+/* ═══ STORAGE (Firestore) ═══ */
+const _cache = {};
+
+async function lg(k) {
+  if (_cache[k] !== undefined) return _cache[k];
+  try {
+    const doc = await db.collection('data').doc(k).get();
+    const val = doc.exists ? doc.data().v : null;
+    _cache[k] = val;
+    return val;
+  } catch(e) { return _cache[k] || null; }
+}
+
+async function ls(k, v) {
+  _cache[k] = v;
+  try { await db.collection('data').doc(k).set({ v }); } catch(e) {}
+}
+
+function lgSync(k) { return _cache[k] || null; }
+
+const gMem  = () => lgSync('ocpt_mem')  || [];
+const sMem  = v  => ls('ocpt_mem',  v);
+const gSch  = () => lgSync('ocpt_sch')  || {};
+const sSch  = v  => ls('ocpt_sch',  v);
+const gNot  = () => lgSync('ocpt_not')  || [];
+const sNot  = v  => ls('ocpt_not',  v);
+const gPr   = () => lgSync('ocpt_pr')   || [];
+const sPr   = v  => ls('ocpt_pr',   v);
+const gSetPr= () => lgSync('ocpt_setpr')|| [];
+const sSetPr= v  => ls('ocpt_setpr',v);
+
+/* ═══ SCHEDULE ═══ */
+let cY,cM,selD=null;
+function openSched(){show('scheduleRoom');setQ('sched');drawAll();const n=new Date();cY=n.getFullYear();cM=n.getMonth();renderCal()}
+function renderCal(){
+  const sch=gSch();
+  const MO=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const td=new Date(),fd=new Date(cY,cM,1).getDay(),dim=new Date(cY,cM+1,0).getDate();
+  let h=`<div class="cal-nav">
+    <button class="cal-arr" onclick="pM()">‹</button>
+    <span class="cal-mo">${MO[cM]} ${cY}</span>
+    <button class="cal-arr" onclick="nM()">›</button>
+  </div>
+  <div class="calgrid">
+    ${['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<div class="cdh">${d}</div>`).join('')}`;
+  for(let i=0;i<fd;i++)h+=`<div class="cc empty"></div>`;
+  for(let d=1;d<=dim;d++){
+    const ds=`${cY}-${String(cM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isT=td.getFullYear()===cY&&td.getMonth()===cM&&td.getDate()===d;
+    const isS=selD===ds;
+    const asgn=sch[ds]||[];
+    const chips=asgn.map(a=>`<span class="chip c${a.status[0]}">${a.name.split(' ')[0]}</span>`).join('');
+    h+=`<div class="cc${isT?' today':''}${isS?' selected':''}" onclick="selDate('${ds}')"><div class="cnum">${d}</div>${chips}</div>`;
+  }
+  h+='</div>';
+
+  if(selD){
+    const asgn=sch[selD]||[];
+    const dl=new Date(selD+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+    h+=`<div class="dbanner">📅 ${dl}</div>`;
+
+    if(user.role==='leader'){
+      const mem=gMem(),asgnN=asgn.map(a=>a.name);
+      const checks=mem.length?mem.map(m=>`<label class="cpill"><input type="checkbox" ${asgnN.includes(m)?'checked':''} value="${m}"/><span>${m}</span></label>`).join(''):`<span style="font-size:13px;color:var(--ink3)">Add students below first.</span>`;
+      h+=`<div class="scard"><div class="scard-head">Assign students</div><div class="cpills" id="cpills">${checks}</div><button class="btn btn-ink" onclick="saveAsgn()">Save assignments</button></div>`;
+    }
+
+    if(asgn.length){
+      h+=`<div class="scard"><div class="scard-head">On set this day</div>`;
+      asgn.forEach((a,i)=>{
+        const isMe=a.name.toLowerCase()===user.name.toLowerCase();
+        if(user.role==='member'&&isMe&&a.status==='pending')
+          h+=`<div class="srow"><span class="srow-name">${a.name}</span><div class="actbtns"><button class="actbtn ayes" onclick="respond('${selD}',${i},'accepted')">✓ Accept</button><button class="actbtn ano" onclick="respond('${selD}',${i},'declined')">✕ Decline</button></div></div>`;
+        else
+          h+=`<div class="srow"><span class="srow-name">${a.name}</span><span class="spill sp-${a.status}">${cap(a.status)}</span></div>`;
+      });
+      h+=`</div>`;
+    } else h+=`<div class="infomsg">No one assigned to this date yet.</div>`;
+
+    if(user.role==='leader'){
+      const mem=gMem();
+      h+=`<div class="scard"><div class="scard-head">Team roster</div>
+        ${mem.map(m=>`<div class="mrow"><span>${m}</span><button class="delbtn" onclick="delM('${esc(m)}')">×</button></div>`).join('')}
+        <div class="addrow"><input class="sinput" id="newM" placeholder="Add student name…" onkeydown="if(event.key==='Enter')addM()"/><button class="btn btn-sage" onclick="addM()">Add</button></div>
+      </div>`;
+    }
+  }
+  document.getElementById('schedBody').innerHTML=h;
+}
+function selDate(d){selD=selD===d?null:d;renderCal()}
+function pM(){cM--;if(cM<0){cM=11;cY--;}selD=null;renderCal()}
+function nM(){cM++;if(cM>11){cM=0;cY++;}selD=null;renderCal()}
+function saveAsgn(){
+  const sch=gSch(),ex=sch[selD]||[],checks=document.querySelectorAll('#cpills input[type=checkbox]'),na=[];
+  checks.forEach(c=>{if(c.checked){const p=ex.find(a=>a.name===c.value);na.push({name:c.value,status:p?p.status:'pending'});}});
+  sch[selD]=na;sSch(sch);renderCal();
+}
+function respond(ds,i,st){const sch=gSch();if(sch[ds]&&sch[ds][i]){sch[ds][i].status=st;sSch(sch);renderCal()}}
+function addM(){const inp=document.getElementById('newM');if(!inp||!inp.value.trim())return;const n=inp.value.trim(),m=gMem();if(!m.includes(n)){m.push(n);sMem(m);}inp.value='';renderCal()}
+function delM(n){sMem(gMem().filter(m=>m!==n));renderCal()}
+
+/* ═══ NOTES ═══ */
+let nView='list',eId=null;
+function openNotes(){show('notesRoom');setQ('notesP');drawAll();nView='list';eId=null;renderNotes()}
+function renderNotes(){
+  nView='list';
+  document.getElementById('notesBack').onclick=notesBack;
+  document.getElementById('notesTitle').textContent='Notes';
+  const notes=gNot();
+  let h='';
+  if(user.role==='leader')h+=`<button class="new-note-btn" onclick="openEd(null)">＋  New page</button>`;
+  if(!notes.length)h+=`<div class="infomsg">${user.role==='leader'?'Create your first note above.':'No notes yet — check back soon.'}</div>`;
+  else notes.forEach(n=>{
+    const pr=n.body?(n.body.substring(0,70)+(n.body.length>70?'…':'')):'No content yet.';
+    h+=`<div class="ncard" onclick="openNote('${n.id}')">
+      <div class="ncard-bar"></div>
+      <div class="ncard-body">
+        <div class="ncard-title">${esc(n.title||'Untitled')}</div>
+        <div class="ncard-prev">${esc(pr)}</div>
+        <div class="ncard-date">${n.date||''}</div>
+      </div>
+      <span class="ncard-arr">›</span>
+    </div>`;
+  });
+  document.getElementById('notesBody').innerHTML=h;
+}
+function openNote(id){
+  const notes=gNot(),note=notes.find(n=>n.id===id);if(!note)return;
+  nView='view';
+  document.getElementById('notesBack').onclick=renderNotes;
+  document.getElementById('notesTitle').textContent=note.title||'Untitled';
+  let h=`<div class="nread-title">${esc(note.title||'Untitled')}</div><div class="nread-meta">${note.date||''}</div><div class="nread-body">${esc(note.body||'')}</div>`;
+  if(user.role==='leader')h+=`<div style="margin-top:1.5rem;display:flex;gap:8px"><button class="btn btn-warm" onclick="openEd('${id}')">✏️ Edit page</button></div>`;
+  document.getElementById('notesBody').innerHTML=h;
+}
+function openEd(id){
+  const notes=gNot(),note=id?notes.find(n=>n.id===id):null;
+  eId=id;nView='edit';
+  document.getElementById('notesBack').onclick=renderNotes;
+  document.getElementById('notesTitle').textContent=id?'Edit page':'New page';
+  document.getElementById('notesBody').innerHTML=`
+    <input class="ned-title" id="nT" placeholder="Page title…" value="${esc(note?note.title:'')}"/>
+    <textarea class="ned-body" id="nB" placeholder="Write your notes here…">${esc(note?note.body:'')}</textarea>
+    <div style="display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap">
+      <button class="btn btn-ink" onclick="saveNote()">Save</button>
+      ${id?`<button class="btn btn-rose" onclick="delNote('${id}')">Delete</button>`:''}
+      <button class="btn btn-ghost" onclick="renderNotes()">Cancel</button>
+    </div>`;
+}
+function saveNote(){
+  const title=document.getElementById('nT').value.trim()||'Untitled',body=document.getElementById('nB').value,notes=gNot();
+  const now=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  if(eId){const i=notes.findIndex(n=>n.id===eId);if(i>-1){notes[i].title=title;notes[i].body=body;notes[i].date='Updated '+now;}}
+  else notes.unshift({id:'n'+Date.now(),title,body,date:'Created '+now});
+  sNot(notes);renderNotes();
+}
+function delNote(id){if(!confirm('Delete this page?'))return;sNot(gNot().filter(n=>n.id!==id));renderNotes()}
+function notesBack(){nView==='list'?goHub():renderNotes()}
+
+/* ═══ PRAYER ═══ */
+let pTab='submit';
+function openPrayer(){show('prayerRoom');setQ('prayer');drawAll();pTab='submit';renderPrayer()}
+
+function renderPrayer(){
+  const pr=gPr();
+  const setpr=gSetPr();
+  const mySetPrCount=getMySetPrayers().length;
+  let h=`<div class="tabs">
+    <button class="tab${pTab==='submit'?' active':''}"  onclick="pTab='submit';renderPrayer()">🙏 Submit</button>
+    <button class="tab${pTab==='view'?' active':''}"    onclick="pTab='view';renderPrayer()">📋 General (${pr.length})</button>
+    <button class="tab${pTab==='set'?' active':''}"     onclick="pTab='set';renderPrayer()">🎵 Set List${mySetPrCount?` (${mySetPrCount})`:''}</button>
+  </div>`;
+
+  if(pTab==='submit'){
+    // Get upcoming dates for the set prayer dropdown
+    const sch=gSch();
+    const today=new Date();today.setHours(0,0,0,0);
+    const upDates=Object.keys(sch)
+      .filter(ds=>{const d=new Date(ds+'T12:00:00');return d>=today&&sch[ds].length>0;})
+      .sort();
+
+    h+=`<div class="pform">
+      <div class="pform-top">
+        <h3>Share a prayer request</h3>
+        <textarea class="ptxt" id="pTxt" placeholder="Write your prayer request here…"></textarea>
+        <div style="margin-top:10px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--ink2);margin-bottom:6px">Link to a set date? (optional)</div>
+          <select class="pset-date-select" id="pSetDate">
+            <option value="">— General prayer request (no specific set) —</option>
+            ${upDates.map(ds=>{
+              const dl=new Date(ds+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+              const names=sch[ds].map(a=>a.name).join(', ');
+              return `<option value="${ds}">📅 ${dl} — ${names}</option>`;
+            }).join('')}
+          </select>
+          <div style="font-size:11px;color:var(--ink3)">If linked to a set, only members on that set will see it on their home screen.</div>
+        </div>
+      </div>
+      <div class="pform-footer">
+        <label class="anon-check"><input type="checkbox" id="pAnon"/> Post anonymously</label>
+        <button class="btn btn-dust" onclick="submitPr()">Submit 🙏</button>
+      </div>
+    </div>`;
+
+  } else if(pTab==='view'){
+    if(!pr.length)h+=`<div class="infomsg">No general prayer requests yet.</div>`;
+    else pr.slice().reverse().forEach(p=>{
+      h+=`<div class="pcard">
+        <div class="pcard-who">${p.anon?'🌸 Anonymous':'🙏 '+esc(p.name)}</div>
+        <div class="pcard-text">${esc(p.text)}</div>
+        <div class="pcard-date">📅 ${p.date||'Unknown date'}</div>
+        ${user.role==='leader'?`<div class="pcard-foot"><button class="btn btn-rose" style="font-size:11px;padding:4px 12px" onclick="delPr('${p.id}')">Remove</button></div>`:''}
+      </div>`;
+    });
+
+  } else {
+    // ── SET PRAYER TAB: grouped by date ──
+    // Determine which set prayers this user can see:
+    // Leaders see all. Students only see sets they're assigned to.
+    const sch=gSch();
+    let visibleSetPr;
+    if(user.role==='leader'){
+      visibleSetPr=setpr;
+    } else {
+      // Find all dates this student is assigned to (any status)
+      const myDates=Object.keys(sch).filter(ds=>sch[ds].some(a=>a.name.toLowerCase()===user.name.toLowerCase()));
+      visibleSetPr=setpr.filter(p=>myDates.includes(p.setDate));
+    }
+
+    if(!visibleSetPr.length){
+      h+=`<div class="infomsg">No set prayer requests yet${user.role==='member'?' for your assigned dates':''}.</div>`;
+    } else {
+      // Group by setDate
+      const byDate={};
+      visibleSetPr.forEach(p=>{
+        if(!byDate[p.setDate])byDate[p.setDate]=[];
+        byDate[p.setDate].push(p);
+      });
+      Object.keys(byDate).sort().forEach(ds=>{
+        const dl=new Date(ds+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+        const items=byDate[ds];
+        h+=`<div class="setpr-block">
+          <div class="setpr-header">
+            <div class="setpr-date">📅 ${dl}</div>
+            <span class="setpr-count">${items.length} request${items.length!==1?'s':''}</span>
+          </div>
+          <div class="setpr-items">`;
+        items.slice().reverse().forEach(p=>{
+          h+=`<div class="setpr-item">
+            <div class="setpr-item-who">${p.anon?'🌸 Anonymous':'🙏 '+esc(p.name)}</div>
+            <div class="setpr-item-text">${esc(p.text)}</div>
+            ${user.role==='leader'?`<div style="display:flex;justify-content:flex-end;margin-top:6px"><button class="btn btn-rose" style="font-size:11px;padding:4px 12px" onclick="delSetPr('${p.id}')">Remove</button></div>`:''}
+          </div>`;
+        });
+        h+=`</div></div>`;
+      });
+    }
+  }
+  document.getElementById('prayerBody').innerHTML=h;
+}
+
+function getMySetPrayers(){
+  // Returns set prayers visible to the current user
+  const setpr=gSetPr(),sch=gSch();
+  if(user.role==='leader')return setpr;
+  const myDates=Object.keys(sch).filter(ds=>sch[ds].some(a=>a.name.toLowerCase()===user.name.toLowerCase()));
+  return setpr.filter(p=>myDates.includes(p.setDate));
+}
+
+function submitPr(){
+  const txt=document.getElementById('pTxt').value.trim();if(!txt)return;
+  const anon=document.getElementById('pAnon').checked;
+  const setDate=document.getElementById('pSetDate')?document.getElementById('pSetDate').value:'';
+  const now=new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  if(setDate){
+    // It's a set prayer
+    const setpr=gSetPr();
+    setpr.push({id:'sp'+Date.now(),name:user.name,text:txt,anon,date:now,setDate});
+    sSetPr(setpr);
+  } else {
+    // General prayer
+    const pr=gPr();
+    pr.push({id:'p'+Date.now(),name:user.name,text:txt,anon,date:now});
+    sPr(pr);
+  }
+  pTab=setDate?'set':'view';
+  renderPrayer();
+  renderSchedDash(); // refresh dashboard to show new set prayers
+}
+
+function delPr(id){if(!confirm('Remove this request?'))return;sPr(gPr().filter(p=>p.id!==id));renderPrayer()}
+function delSetPr(id){if(!confirm('Remove this set prayer request?'))return;sSetPr(gSetPr().filter(p=>p.id!==id));renderPrayer();renderSchedDash();}
+
+/* ═══ UTILS ═══ */
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+
+function watchKey(k, cb) {
+  if (!db) return;
+  db.collection('data').doc(k).onSnapshot(snap => {
+    if (snap.exists) { _cache[k] = snap.data().v; cb(snap.data().v); }
+  });
+}
+
+async function initFirestore() {
+  try { firebase.initializeApp(firebaseConfig); } catch(e) { /* already init */ }
+  db = firebase.firestore();
+  const keys = ['ocpt_mem','ocpt_sch','ocpt_not','ocpt_pr','ocpt_setpr'];
+  await Promise.all(keys.map(k => lg(k)));
+  watchKey('ocpt_sch',   () => { if(document.getElementById('schedBody')) renderCal(); renderSchedDash(); });
+  watchKey('ocpt_pr',    () => { if(document.getElementById('prayerBody') && pTab==='view') renderPrayer(); });
+  watchKey('ocpt_setpr', () => { if(document.getElementById('prayerBody') && pTab==='set')  renderPrayer(); renderSchedDash(); });
+  watchKey('ocpt_mem',   () => { if(document.getElementById('schedBody')) renderCal(); });
+  watchKey('ocpt_not',   () => { if(document.getElementById('notesBody')) renderNotes(); });
+}
+
+/* ═══ INIT ═══ */
+document.addEventListener('DOMContentLoaded', function() {
+  initQ(); setAllQ(); drawAll();
+  initFirestore().then(() => {
+    if (document.getElementById('hubScreen') &&
+        document.getElementById('hubScreen').classList.contains('active')) {
+      renderSchedDash();
+      renderSetPrayDash();
+    }
+  });
+});
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</body>
+</html>
